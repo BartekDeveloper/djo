@@ -11,3 +11,17 @@ test('quiz: kolejność pytań jest losowana', async ({ page }) => {
   }
   expect(seen.size).toBeGreaterThan(1)
 })
+
+test('quiz: plansza końcowa z wynikiem i przyciskiem', async ({ page }) => {
+  await page.goto('/gry.html#quiz')
+  for (let i = 0; i < 8; i++) {
+    await expect(page.getByText(`Pytanie ${i + 1} / 8`, { exact: false })).toBeVisible()
+    await page.getByRole('button', { name: /^Odpowiedź [ABCD]:/ }).first().click()
+    if (i < 7) {
+      await page.getByRole('button', { name: 'Następne pytanie' }).click()
+    }
+  }
+  await expect(page.locator('#quiz').getByLabel('Wynik końcowy')).toBeVisible()
+  await page.locator('#quiz').getByRole('button', { name: 'Zagraj ponownie' }).click()
+  await expect(page.getByText('Pytanie 1 / 8', { exact: false })).toBeVisible()
+})
