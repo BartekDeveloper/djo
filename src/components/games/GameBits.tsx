@@ -34,7 +34,7 @@ export function Verdict({ good, children }: { good: boolean; children: ReactNode
   return (
     <p
       role="status"
-      className={`mt-3 flex items-start gap-2 rounded-[10px] border-[1.5px] p-4 text-sm ${
+      className={`flex items-start gap-2 rounded-[10px] border-[1.5px] p-4 text-sm ${
         good ? 'border-talavera bg-talavera/10' : 'border-ink bg-sunken'
       }`}
     >
@@ -47,9 +47,32 @@ export function Verdict({ good, children }: { good: boolean; children: ReactNode
         {good ? <Check size={14} /> : <X size={14} />}
       </span>
       <span>
-        <strong>{good ? 'Dobrze!' : 'Nie tym razem.'}</strong> {children}
+        <strong>{good ? 'Brawo!' : 'Nie tym razem.'}</strong> {children}
       </span>
     </p>
+  )
+}
+
+export function ResultPanel({ score, total, extra, onRetry }: { score: number; total: number; extra?: string; onRetry: () => void }) {
+  const pct = total === 0 ? 0 : score / total
+  const cheer =
+    pct >= 1 ? '¡Increíble! Perfekcyjnie!' : pct >= 0.75 ? '¡Muy bien! Świetny wynik!' : pct >= 0.5 ? '¡Bien! Nieźle — jeszcze raz?' : 'Buen intento! Spróbuj ponownie.'
+  return (
+    <section aria-label="Wynik końcowy" className="rounded-[14px] border-[1.5px] border-ink bg-sunken p-6 text-center md:p-8">
+      <p className="text-xs font-bold uppercase tracking-widest">Twój wynik</p>
+      <p className="font-display mt-2 text-5xl font-bold md:text-6xl">
+        {score} <span className="text-2xl text-muted">/ {total}</span>
+      </p>
+      <p className="font-display mt-2 text-lg font-semibold italic">{cheer}</p>
+      {extra && <p className="mt-1 text-sm text-muted">{extra}</p>}
+      <button
+        type="button"
+        onClick={onRetry}
+        className="mt-5 inline-flex min-h-[44px] items-center rounded-[10px] bg-ink px-8 py-3 text-sm font-semibold text-[#f9f6f0]"
+      >
+        Zagraj ponownie
+      </button>
+    </section>
   )
 }
 

@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { ScorePill } from './GameBits'
+import { ResultPanel, ScorePill } from './GameBits'
 import { wordMatch } from '../../data/quiz'
 import { shuffle } from '../../utils/shuffle'
 
@@ -85,13 +85,24 @@ export default function ImageWordMatch() {
           ))}
         </div>
       </div>
-      <button
-        type="button"
-        onClick={reset}
-        className="mt-4 inline-flex min-h-[44px] items-center rounded-[10px] border-[1.5px] border-ink px-6 py-2 text-sm font-semibold"
-      >
-        Zagraj ponownie
-      </button>
+      {done.length === wordMatch.length ? (
+        <div className="mt-4">
+          <ResultPanel
+            score={done.length}
+            total={wordMatch.length}
+            extra={best > 0 ? `Twój rekord: ${best} / ${wordMatch.length}` : undefined}
+            onRetry={reset}
+          />
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={reset}
+          className="mt-4 inline-flex min-h-[44px] items-center rounded-[10px] border-[1.5px] border-ink px-6 py-2 text-sm font-semibold"
+        >
+          Zagraj ponownie
+        </button>
+      )}
     </div>
   )
 }

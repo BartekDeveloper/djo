@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import FlagEs from '../decor/FlagEs'
 import FlagMx from '../decor/FlagMx'
-import { CountryButton, ScorePill, Verdict, type CountryState } from './GameBits'
+import { CountryButton, ResultPanel, ScorePill, Verdict, type CountryState } from './GameBits'
 import { landmarkGuess } from '../../data/quiz'
 import { shuffle } from '../../utils/shuffle'
 
@@ -61,13 +61,8 @@ export default function LandmarkGuesser() {
           />
         ))}
       </div>
-      {chosen && (
-        <Verdict good={good}>
-          {good ? 'To ten kraj.' : `Nie — to ${item.country === 'spain' ? 'Hiszpania' : 'Meksyk'}.`}
-        </Verdict>
-      )}
       <div className="mt-4">
-        {!last ? (
+        {!last && (
           <button
             type="button"
             onClick={next}
@@ -76,18 +71,20 @@ export default function LandmarkGuesser() {
           >
             Następny symbol
           </button>
-        ) : (
-          chosen && (
-            <button
-              type="button"
-              onClick={reset}
-              className="inline-flex min-h-[44px] items-center rounded-[10px] bg-ink px-6 py-2 text-sm font-semibold text-[#f9f6f0]"
-            >
-              Wynik: {score} / {items.length} — zagraj ponownie
-            </button>
-          )
         )}
       </div>
+      <div className="mt-3 min-h-[96px]">
+        {chosen && (
+          <Verdict good={good}>
+            {good ? 'To ten kraj.' : `Nie — to ${item.country === 'spain' ? 'Hiszpania' : 'Meksyk'}. ${item.hint}`}
+          </Verdict>
+        )}
+      </div>
+      {last && chosen && (
+        <div className="mt-4">
+          <ResultPanel score={score} total={items.length} onRetry={reset} />
+        </div>
+      )}
     </div>
   )
 }

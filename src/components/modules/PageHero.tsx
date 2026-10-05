@@ -3,7 +3,7 @@ import type { ImageSlot } from '../../data/images'
 interface PageHeroProps {
   kicker: string
   title: string
-  lead: string
+  lead?: string
   accent: 'spain' | 'mexico'
   image: ImageSlot
 }
@@ -17,7 +17,7 @@ export default function PageHero({ kicker, title, lead, accent, image }: PageHer
         <p className="text-xs font-bold uppercase tracking-widest text-white/80">{kicker}</p>
         <h1 className="font-display mt-3 max-w-2xl text-4xl font-bold text-white md:text-5xl">{title}</h1>
         <div className={`mt-4 h-1 w-24 ${accent === 'spain' ? 'bg-[#ff8a7a]' : 'bg-[#7ddba3]'}`} aria-hidden="true" />
-        <p className="mt-4 max-w-2xl text-lg text-white/90">{lead}</p>
+        {lead && <p className="mt-4 max-w-2xl text-lg text-white/90">{lead}</p>}
       </div>
     </section>
   )

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import FlagEs from '../decor/FlagEs'
 import FlagMx from '../decor/FlagMx'
-import { CountryButton, ScorePill, Verdict, type CountryState } from './GameBits'
+import { CountryButton, ResultPanel, ScorePill, Verdict, type CountryState } from './GameBits'
 import { dialectSort } from '../../data/quiz'
 import { shuffle } from '../../utils/shuffle'
 
@@ -61,15 +61,8 @@ export default function DialectSorter() {
           />
         ))}
       </div>
-      {chosen && (
-        <Verdict good={good}>
-          {good
-            ? 'Brawo.'
-            : `Nie — to wariant ${item.country === 'spain' ? 'hiszpański (es-ES)' : 'meksykański (es-MX)'}.`}
-        </Verdict>
-      )}
       <div className="mt-4">
-        {!last ? (
+        {!last && (
           <button
             type="button"
             onClick={next}
@@ -78,18 +71,22 @@ export default function DialectSorter() {
           >
             Następne słowo
           </button>
-        ) : (
-          chosen && (
-            <button
-              type="button"
-              onClick={reset}
-              className="inline-flex min-h-[44px] items-center rounded-[10px] bg-ink px-6 py-2 text-sm font-semibold text-[#f9f6f0]"
-            >
-              Wynik: {score} / {items.length} — zagraj ponownie
-            </button>
-          )
         )}
       </div>
+      <div className="mt-3 min-h-[96px]">
+        {chosen && (
+          <Verdict good={good}>
+            {good
+              ? 'Brawo.'
+              : `Nie — to wariant ${item.country === 'spain' ? 'hiszpański (es-ES)' : 'meksykański (es-MX)'}.`}
+          </Verdict>
+        )}
+      </div>
+      {last && chosen && (
+        <div className="mt-4">
+          <ResultPanel score={score} total={items.length} onRetry={reset} />
+        </div>
+      )}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { Check, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { ScorePill } from './GameBits'
+import { ResultPanel, ScorePill } from './GameBits'
 import { culturalQuiz } from '../../data/quiz'
 import { shuffle } from '../../utils/shuffle'
 
@@ -15,7 +15,6 @@ export default function CulturalQuiz() {
     [q],
   )
   if (!q) return null
-  const finished = index >= qs.length - 1 && chosen !== null
   const last = index === qs.length - 1
   const good = chosen !== null && opts[chosen]?.ok === true
 
@@ -70,28 +69,8 @@ export default function CulturalQuiz() {
           )
         })}
       </div>
-      {chosen !== null && (
-        <p
-          role="status"
-          className={`mt-3 flex items-start gap-2 rounded-[10px] border-[1.5px] p-4 text-sm ${
-            good ? 'border-talavera bg-talavera/10' : 'border-ink bg-sunken'
-          }`}
-        >
-          <span
-            aria-hidden="true"
-            className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${
-              good ? 'bg-talavera text-white' : 'bg-ink text-[#f9f6f0]'
-            }`}
-          >
-            {good ? <Check size={14} /> : <X size={14} />}
-          </span>
-          <span>
-            <strong>{good ? 'Dobrze!' : 'Nie tym razem.'}</strong> {q.explanation}
-          </span>
-        </p>
-      )}
       <div className="mt-4 flex gap-2">
-        {!last ? (
+        {!last && (
           <button
             type="button"
             onClick={next}
@@ -100,18 +79,36 @@ export default function CulturalQuiz() {
           >
             Następne pytanie
           </button>
-        ) : (
-          chosen !== null && (
-            <button
-              type="button"
-              onClick={reset}
-              className="inline-flex min-h-[44px] items-center rounded-[10px] bg-ink px-6 py-2 text-sm font-semibold text-[#f9f6f0]"
-            >
-              {finished ? `Wynik: ${score} / ${qs.length} — zagraj ponownie` : 'Zagraj ponownie'}
-            </button>
-          )
         )}
       </div>
+      {last && chosen !== null ? (
+        <div className="mt-4">
+          <ResultPanel score={score} total={qs.length} onRetry={reset} />
+        </div>
+      ) : (
+        <div className="mt-3 min-h-[96px]">
+          {chosen !== null && (
+            <p
+              role="status"
+              className={`flex items-start gap-2 rounded-[10px] border-[1.5px] p-4 text-sm ${
+                good ? 'border-talavera bg-talavera/10' : 'border-ink bg-sunken'
+              }`}
+            >
+              <span
+                aria-hidden="true"
+                className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${
+                  good ? 'bg-talavera text-white' : 'bg-ink text-[#f9f6f0]'
+                }`}
+              >
+                {good ? <Check size={14} /> : <X size={14} />}
+              </span>
+              <span>
+                <strong>{good ? 'Brawo!' : 'Nie tym razem.'}</strong> {q.explanation}
+              </span>
+            </p>
+          )}
+        </div>
+      )}
     </div>
   )
 }

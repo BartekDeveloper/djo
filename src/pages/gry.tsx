@@ -27,7 +27,6 @@ export default function Gry() {
       <PageHero
         kicker="Arena gier"
         title="Zagraj i sprawdź się"
-        lead="Cztery gry bez backendu: na projektorze gra cała klasa wspólnie, na telefonie — każdy sam przez kod QR."
         accent="spain"
         image={IMAGES.heroSpain}
       />
